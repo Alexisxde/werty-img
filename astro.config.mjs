@@ -1,11 +1,15 @@
 // @ts-check
-import { defineConfig } from 'astro/config'
+import node from "@astrojs/node"
+import react from "@astrojs/react"
+import tailwindcss from "@tailwindcss/vite"
+import { defineConfig } from "astro/config"
+import auth from "auth-astro"
 
-import react from '@astrojs/react'
-import tailwindcss from '@tailwindcss/vite'
-
-// https://astro.build/config
 export default defineConfig({
-  vite: { plugins: [tailwindcss()] },
-  integrations: [react()]
+	vite: { plugins: [tailwindcss()] },
+	integrations: [react(), auth()],
+	trailingSlash: "never",
+	output: "server",
+	adapter: node({ mode: "standalone" }),
+	experimental: { svg: { mode: "sprite" } }
 })

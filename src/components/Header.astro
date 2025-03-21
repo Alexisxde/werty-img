@@ -1,0 +1,15 @@
+---
+import SignInButton from "@/components/SignInButton.astro"
+import type { Session } from "@auth/core/types"
+import { Auth } from "auth-astro/components"
+import WertyLogo from "public/favicon.svg"
+import SignOutButton from "./SignOutButton.astro"
+---
+
+<header
+	class="mx-auto flex items-center justify-between w-full max-w-8xl px-10 py-5">
+	<a href="/"><WertyLogo class="h-6" /></a>
+	<Auth>
+		{(session: Session) => (session ? <SignOutButton /> : <SignInButton />)}
+	</Auth>
+</header>

@@ -1,0 +1,18 @@
+---
+import Image from "astro/components/Image.astro"
+import { SignOut } from "auth-astro/components"
+import { getSession } from "auth-astro/server"
+
+const session = await getSession(Astro.request)
+---
+
+<SignOut
+	class="text-neutral-100 bg-neutral-800 hover:bg-neutral-700 focus:ring-4 focus:outline-none focus:ring-neutral-900/50 font-medium rounded-md text-sm px-5 py-2.5 text-center inline-flex items-center me-2 mb-2">
+	<Image
+		class="size-6 rounded-full mr-2"
+		src={session?.user?.image as string}
+		alt={session?.user?.name as string}
+		inferSize={true}
+	/>
+	Logout
+</SignOut>

@@ -1,7 +1,44 @@
 ---
+import Form from "@/components/Form.astro"
 import Layout from "@/layouts/Layout.astro"
+import { API_KEY, API_URL } from "@/lib/env"
+import { getSession } from "auth-astro/server"
+
+const session = await getSession(Astro.request)
+
+interface Image {
+	user_id: string
+	image_id: string
+	url: string
+	format: string
+	created_at: string
+}
+
+let data: Image[] = []
+
+try {
+	const res = await fetch(`${API_URL}/api/images/${session?.user?.email}`, {
+		method: "GET",
+		headers: { Authorization: `Bearer ${API_KEY}` }
+	})
+	if (!res.ok) throw new Error(`Response status: ${res.status}`)
+	data = await res.json()
+} catch (error: any) {
+	console.error(error.message)
+}
 ---
 
 <Layout>
-	<h1 class="bg-red-500 p-10 m-7 text-zinc-700 text-xs">Hello World</h1>
+	<Form />
+	{
+		data.length === 0 ? (
+			<div class="flex items-center justify-center min-h-max">No hay nada</div>
+		) : (
+			<section class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-10">
+				{data.map(({ image_id, url }) => (
+					<img src={url} alt={image_id} />
+				))}
+			</section>
+		)
+	}
 </Layout>
